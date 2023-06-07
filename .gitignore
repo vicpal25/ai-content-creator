@@ -4,4 +4,7 @@
 .env
 package-lock.json
 node_modules
-output/*
+server/utils/output/*
+server/output/*
+
+
