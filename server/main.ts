@@ -2,16 +2,20 @@ import express from 'express';
 import fs from 'fs';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import bodyParser from 'body-parser';
 
-import { downloadFromGoogleStorage, generateVoice } from './utils';
+import { downloadFromGoogleStorage, generateVoice, generateSuggestionsFromPrompt } from './utils';
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 
+// Parse JSON bodies
+app.use(bodyParser.json());
 
 const categories = [{ title: 'Ford Mustang Vs. Chevrolet Camaro.', id: '078c9fa9-7614-4d17-8fb7-017325bcc5c3', prompt: 'Ford Mustang Vs. Chevrolet Camaro.' },
+{ title: 'Can an F1 car beat an Tesla Plaid?', id: '078c9fa9-7614-4d17-8fb7-017325bcc5c3', prompt: 'F1 vs. Tesla Plaid?' },
 { title: 'Corvette ZR1 vs. Ford GT00', id: 'f699f12a-9094-42f7-bd8b-cbf964282207', prompt: 'Corvette ZR1 vs. Ford GT00' }];
 
 app.get('/categories/', async (req, res) => {
@@ -24,9 +28,9 @@ app.get('/category/:id', async (req, res) => {
   const category = categories.find(c => c.id === req.params.id);
   console.log('category', category?.prompt);
 
-
   if (category) {
     const result = await generateVoice(category.prompt);
+
     res.status(200).json({ message: result });
     // res.status(200).json({
     //   "message": {
@@ -37,6 +41,32 @@ app.get('/category/:id', async (req, res) => {
   }
 
 });
+
+//
+app.post('/generate-suggestions', async (req, res) => {
+
+  const { topic } = req.body;
+
+  if(!topic) return res.status(400).json({ message: 'Please provide a topic.' });
+
+  try {
+    const formattedTopic = `Provide a topic of: ${topic} in JSON format.`;
+    console.log('formattedTopic', formattedTopic);    
+    // Generate content using OpenAI's GPT-3
+    const gpt3Response = await generateSuggestionsFromPrompt(formattedTopic);
+
+    console.log('gpt3Response', gpt3Response);
+    
+
+    return res.status(200).json({ message: gpt3Response });
+
+  } 
+  catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'An error occurred during content generation and upload.' });
+  }
+});
+
 
 
 app.get('/generate/:make/:year/:model', async (req, res) => {

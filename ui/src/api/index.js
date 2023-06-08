@@ -19,6 +19,17 @@ export async function getEpisode(id) {
   return [response.data];
 }
 
+export async function setSuggestions(topic) {
+  const url = `${BASE_URL}/generate-suggestions`;
+
+  const body = {
+    topic: topic
+  }
+
+  const response = await axios.post(url, body);
+  return [response.data];
+}
+
 export async function postSomething(data) {
   const response = await axios.post(`${BASE_URL}/something`, data);
   return response.data;

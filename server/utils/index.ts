@@ -37,12 +37,35 @@ export async function getSignedUrl(bucketName: string, remoteFileName: string) {
     return url;
 }
 
+export async function generateVoiceFromParams(make: string, year: string, model: string) {
+
+}
+
+export async function generateSuggestionsFromPrompt(promptText: string) {
+
+    const openAIConfig = new Configuration({
+        apiKey: process.env.OPENAI_API_KEY,
+    });
+    const openai = new OpenAIApi(openAIConfig);
+    
+    // Generate content using OpenAI's GPT-3
+    const gpt3Response = await openai.createCompletion({
+        model: 'text-davinci-002',
+        prompt: `Please generate some trending 2024 suggestions based on: ${promptText} and return them in JSON format.`,
+        max_tokens: 500,
+    });
+
+    const aiResponse =  gpt3Response.data.choices?.[0]?.text?.trim() || '';
+    const suggestions = aiResponse.split('\n').map((suggestion) => suggestion.trim()).filter((suggestion) => suggestion.length > 0);
+
+    return suggestions;
+
+}
+
 export async function generateVoice(promptText: string) {
 
     try {
-        console.log('promptText', promptText);
-        
-
+ 
         const openAIConfig = new Configuration({
             apiKey: process.env.OPENAI_API_KEY,
         });
