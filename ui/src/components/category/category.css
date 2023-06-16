@@ -1,9 +1,13 @@
 .category {
-    border:1px solid #e22;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    text-align: center;
 }
 
 .responseList {
-    border:1px solid #e22;
 }
 
 .responseList ul {

@@ -93,16 +93,24 @@ const Category = () => {
   return (
     <div>
       {data ? (
-        <div className='category'>
-          <p>{data.text}</p>
-          <p>Additional content...</p>
+        <div className='category' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 
-          <div>
+          <Card sx={{ maxWidth: 345 }}>
+            <CardMedia
+            sx={{ height: 140 }}
+            image={data.image}
+            title="green iguana"
+            />
+            <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+                {data.title}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" style={{maxHight:250, overflowY:'scroll'}}>
+                {data.text}
+            </Typography>
+            <div>
             <audio ref={audioRef} controls>
-              <source
-                src="https://storage.googleapis.com/ai-content-creator/corvette-zr1-vs-ford-gt00-1686165692096.mp3?GoogleAccessId=api-project%40api-project-108888684492.iam.gserviceaccount.com&Expires=1740816000&Signature=kvBnr3rZQI39YU%2BV0TrVjxzoOjqbee%2FmjPF8HxoobBPSzXC5ngfl9E9KgPqoalsgL9kNCBjc6lZU4fOj7I9Kff2t9ebvvxubeBhsrYMGf57smDsDhx%2FdCo1E3WnMk6Nyv0XZ7ruEu0WmtEA7MDZcyouGTl%2BPhksH1MsnAcXJ6qgHdOdaxIIaUL%2BrVE4OSVm3j0xzGHq6Pvjxt9H6psqek0011JcPt5PLMaQ8GZ9JtkswWUvOXn1Wtze%2Fvkua79ToNx6%2B520L4AFw%2BVSSkyPknrmQrYBl62R2WME%2FV0YsIpU1BTdYV7uqmORqrrPZw6gkE%2FyMXcDjDkPaPS6pITe%2BrA%3D%3D"
-                type="audio/mp3"
-              />
+              <source src={audioRef} type="audio/mp3" />
               Your browser does not support the audio element.
             </audio>
 
@@ -113,6 +121,14 @@ const Category = () => {
               <button onClick={handleRewind}>Rewind 10s</button>
             </div>
           </div>
+
+            </CardContent>
+            <CardActions>
+            <Button size="small">Share</Button>
+            <Button size="small">Learn More</Button>
+            </CardActions>
+            </Card>
+
         </div>
       ) : (
         <p>Loading...</p>
