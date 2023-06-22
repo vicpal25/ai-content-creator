@@ -1,8 +1,5 @@
 import axios from 'axios';
 
-// const BASE_URL = 'https://www.thecocktaildb.com/api/json/v1/1/';  // replace this with the base URL of your API
-// const BASE_URL  = 'https://restcountries.com/v3.1/'
-
 const EPISODE = 25
 const BASE_URL = `http://localhost:4000`
 

@@ -67,7 +67,7 @@ const Category = () => {
   }, []);
 
   const handlePlay = () => {
-    audioRef.current.src = data.audio; // Assuming `data.audio` contains the audio source URL
+    audioRef.current.src = data.result.signedUrl; // Assuming `data.audio` contains the audio source URL
     audioRef.current.play();
   };
 
@@ -99,7 +99,7 @@ const Category = () => {
                 {data.title}
               </Typography>
               <Typography variant="body2" color="text.secondary" style={{ maxHeight: 250, overflowY: 'scroll' }}>
-                {data.text}
+                {data.result.text}
               </Typography>
               <div>
                 <audio ref={audioRef} controls>
