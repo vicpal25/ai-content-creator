@@ -3,51 +3,51 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { getTopLevelCategories } from '../../api/index.js';
 import { Button } from '@mui/material';
-import { AppBar, Tab, Tabs } from '@mui/material';
-
-// import axios from 'axios';
-// export async function getTopLevelCategories() {
-//     const response = await axios.get(`${BASE_URL}/shows/25`);
-//     return [response.data];
-//   }
 
 const Home = () => {
-   const [categories, setCategories] = useState(null);
- 
-   useEffect(() => {
-     const fetchCategories = async () => {
-       const data = await getTopLevelCategories();
-       console.log(data);
-       setCategories(data);
-     };
- 
-     fetchCategories();
-   }, []);
- 
-   return (
-     <div class="home">
-       {categories ? (
-         // Render your categories here. This is just an example,
-         // you will need to adjust this to match the shape of your data
-         categories.map((category) => (
+  const [categories, setCategories] = useState(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-          <AppBar position="static">
+  useEffect(() => {
+    console.log('useEffect');
+    if (!dataLoaded) {
+      const fetchCategories = async () => {
+        const data = await getTopLevelCategories();
+        setCategories(data);
+        setDataLoaded(true);
+      };
 
-          <Tabs>
-            <Tab label={category.title} 
-        to={`/category/${category.id}`}
-                    component={Link} />
-          </Tabs>
-        </AppBar>
+      fetchCategories();
+    }
+  }, []); // Empty dependency array to run effect only once on component mount
 
-         ))
-       ) : (
-         'Loading categories...'
-       )}
-     </div>
-   );
- };
- 
+  const handleCategoryClick = (event) => {
+    event.stopPropagation();
+    // Additional logic or handling for category click if needed
+  };
+
+  return (
+    <div className="home">
+      {categories ? (
+        <div>
+          {categories.map((category) => (
+            <Link
+              key={category.id}
+              to={`/category/${category.id}`}
+              className="category-link"
+              onClick={handleCategoryClick}
+            >
+              <h1>{category.title}</h1>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        'Loading categories...'
+      )}
+    </div>
+  );
+};
+
 Home.propTypes = {};
 Home.defaultProps = {};
 
