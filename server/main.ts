@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 
 const categories = [
 { title: 'Fastest V8 vs. Fastest Electric! Who wins?', id: '73c867c3-64db-436b-9074-ed7832febe31', prompt: 'Fastest V8 vs. Fastest Electric! Who wins?' },
-{ title: 'Ford Mustang Vs. Chevrolet Camaro.', id: '078c9fa9-7614-4d17-8fb7-017325bcc5c3', prompt: 'Ford Mustang Vs. Chevrolet Camaro.' },
+{ title: 'Ford Mustang Vs. Chevrolet Camaro.', id: '178c9fa9-7714-4d17-8fb7-017325bcc5c3', prompt: 'Ford Mustang Vs. Chevrolet Camaro.' },
 { title: 'Can an F1 car beat an Tesla Plaid?', id: '078c9fa9-7614-4d17-8fb7-017325bcc5c3', prompt: 'F1 vs. Tesla Plaid?' },
 { title: 'Corvette ZR1 vs. Ford GT00', id: 'f699f12a-9094-42f7-bd8b-cbf964282207', prompt: 'Corvette ZR1 vs. Ford GT00' }];
 
