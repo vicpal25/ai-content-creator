@@ -1,3 +1,4 @@
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { getEpisode, setSuggestions } from '../../api/index.js';
 import { styled } from '@mui/material/styles';
@@ -17,9 +18,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Button from '@mui/material/Button';
 
-import React, { useState, useEffect, useRef } from 'react';
 import './category.css';
-
 
 const Category = () => {
   const { id } = useParams();
@@ -38,7 +37,6 @@ const Category = () => {
       console.log('API post request successful');
       console.log(response);
       setResponseList(response); // Update the response list state with the API response
-
     } catch (error) {
       console.error('API post request failed:', error);
     }
@@ -66,9 +64,10 @@ const Category = () => {
         audioRef.current.removeEventListener('ended', handleAudioFinished);
       };
     }
-  }, [audioRef.current]);
+  }, []);
 
   const handlePlay = () => {
+    audioRef.current.src = data.audio; // Assuming `data.audio` contains the audio source URL
     audioRef.current.play();
   };
 
@@ -89,64 +88,54 @@ const Category = () => {
     audioRef.current.pause();
   };
 
-
   return (
     <div>
       {data ? (
-        <div className='category' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-
+        <div className="category" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Card sx={{ maxWidth: 345 }}>
-            <CardMedia
-            sx={{ height: 140 }}
-            image={data.image}
-            title="green iguana"
-            />
+            <CardMedia sx={{ height: 140 }} image={data.image} title="green iguana" />
             <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
+              <Typography gutterBottom variant="h5" component="div">
                 {data.title}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" style={{maxHight:250, overflowY:'scroll'}}>
+              </Typography>
+              <Typography variant="body2" color="text.secondary" style={{ maxHeight: 250, overflowY: 'scroll' }}>
                 {data.text}
-            </Typography>
-            <div>
-            <audio ref={audioRef} controls>
-              <source src={audioRef} type="audio/mp3" />
-              Your browser does not support the audio element.
-            </audio>
-
-            <div>
-              <button onClick={handlePlay}>Play</button>
-              <button onClick={handlePause}>Pause</button>
-              <button onClick={handleForward}>Forward 10s</button>
-              <button onClick={handleRewind}>Rewind 10s</button>
-            </div>
-          </div>
-
+              </Typography>
+              <div>
+                <audio ref={audioRef} controls>
+                  <source src={data.audio} type="audio/mp3" /> // Assuming `data.audio` contains the audio source URL
+                  Your browser does not support the audio element.
+                </audio>
+                <div>
+                  <Button onClick={handlePlay}>Play</Button>
+                  <Button onClick={handlePause}>Pause</Button>
+                  <Button onClick={handleForward}>Forward 10s</Button>
+                  <Button onClick={handleRewind}>Rewind 10s</Button>
+                </div>
+              </div>
             </CardContent>
             <CardActions>
-            <Button size="small">Share</Button>
-            <Button size="small">Learn More</Button>
+              <Button size="small">Share</Button>
+              <Button size="small">Learn More</Button>
             </CardActions>
-            </Card>
-
+          </Card>
         </div>
       ) : (
         <p>Loading...</p>
       )}
 
-        {responseList && responseList[0] && responseList[0].message ? (
-          <div className='responseList'>
-            <h3>Here are some suggestions for you:</h3>
-            {responseList[0].message.map((item, index) => (
-              <Button key={index} variant="contained" onClick={() => handleSuggestedItemClick(item)}>
-                {item.replace("-", "")}
-              </Button>
-            ))}
-          </div>
-        ) : (
-          <p>No messages found.</p>
-        )}
-
+      {responseList && responseList[0] && responseList[0].message ? (
+        <div className="responseList">
+          <h3>Here are some suggestions for you:</h3>
+          {responseList[0].message.map((item, index) => (
+            <Button key={index} variant="contained" onClick={() => handleSuggestedItemClick(item)}>
+              {item.replace('-', '')}
+            </Button>
+          ))}
+        </div>
+      ) : (
+        <p>No messages found.</p>
+      )}
     </div>
   );
 };
