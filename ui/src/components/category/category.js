@@ -58,13 +58,17 @@ const Category = () => {
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.addEventListener('ended', handleAudioFinished);
+      const handleEnded = async () => {
+        await handleAudioFinished();
+      };
+
+      audioRef.current.addEventListener('ended', handleEnded);
 
       return () => {
-        audioRef.current.removeEventListener('ended', handleAudioFinished);
+        audioRef.current.removeEventListener('ended', handleEnded);
       };
     }
-  }, []);
+  }, [audioRef]);
 
   const handlePlay = () => {
     audioRef.current.src = data.result.signedUrl; // Assuming `data.audio` contains the audio source URL
@@ -103,7 +107,7 @@ const Category = () => {
               </Typography>
               <div>
                 <audio ref={audioRef} controls>
-                  <source src={data.audio} type="audio/mp3" /> // Assuming `data.audio` contains the audio source URL
+                  <source src={data.result.signedUrl} type="audio/mp3" /> {/* Assuming `data.audio` contains the audio source URL */}
                   Your browser does not support the audio element.
                 </audio>
                 <div>
