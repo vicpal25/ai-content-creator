@@ -30,10 +30,12 @@
     "@google-cloud/storage": "^6.11.0",
     "@google-cloud/text-to-speech": "^4.2.2",
     "@google-cloud/translate": "^7.2.1",
+    "bard-ai": "^1.5.0",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "googlebard": "^1.0.6",
     "mongoose": "^7.3.1",
     "openai": "^3.2.1"
   }

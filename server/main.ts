@@ -72,39 +72,39 @@ mongoose
       
         if (category) {
           // Process the category data and generate additional content if needed
-          // const image = await generateImageFromPrompt(category.title);
-          // const title = await generateContentFromPrompt(category.prompt);
-          // const video = await generateVideoBasedOnPrompt(category.prompt);
-          // const result = await generateVoice(category.prompt);
+          const image = await generateImageFromPrompt(category.title);
+          const title = await generateContentFromPrompt(category.prompt);
+          const video = await generateVideoBasedOnPrompt(category.prompt);
+          const result = await generateVoice(category.prompt);
       
           // // Combine the generated content with the category data
-          // const categoryData = {
-          //   ...category.toObject(),
-          //   image,
-          //   title,
-          //   video,
-          //   result,
-          // };
+          const categoryData = {
+            ...category.toObject(),
+            image,
+            title,
+            video,
+            result,
+          };
 
-          const categoryData2 = {
-            "_id": "649481f7bcfc554985a7742d",
-            "title": "The Future of Car Ownership: Subscription Services and Shared Mobility",
-            "id": "3818a6b7-0a01-4d06-936f-36129708ac26",
-            "prompt": "Car ownership is evolving with subscription services and shared mobility. Discuss the future of car ownership and the rise of innovative transportation models.",
-            "image": "https://images.unsplash.com/photo-1467489904517-075c242c2b4f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTk2NTl8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODc0NTQ3MDR8&ixlib=rb-4.0.3&q=80&w=1080",
-            "result": {
-                "signedUrl": "https://storage.googleapis.com/ai-content-creator/car-ownership-is-evolving-with-subscription-services-and-shared-mobility-discuss-the-future-of-car-ownership-and-the-rise-of-innovative-transportation-models-1687454707287.mp3?GoogleAccessId=api-project%40api-project-108888684492.iam.gserviceaccount.com&Expires=1740816000&Signature=SIZaK5Z6DqiMNuRV76kOH5Z10i96WfA8Q0wP286p34%2FaEy2R1Z20iQWWEpyB87%2Bk0HqPY4aVhmf65d1zdl9AH%2BiZf0ItT4Gy%2Bg2%2F3jgNRHIJVQWQLJPWzyC3FagErC1BlNbujfE65XESIXP0Z4%2F76bu6PRA5KZMgnesbYDUmPtn8xjBQQ%2FgGbKt%2FEnXPnodIVj9D19DR4Hi52XVpUXKUOTAwrcWV0fDBn95aY1Imz12bhUcckp05DzPVOLT6UBUROMJj1OBKTcWyZR%2FYP236tipjnD13FcMGV%2B9%2BTKMQzpYZsklam%2Bn9ILJd1nffaQpMUP4QeSVlUTfojQluZ%2BK55w%3D%3D",
-                "text": "Car ownership is evolving, with subscription services and shared mobility on the rise. This trend is driven by a variety of factors, including the increasing cost of ownership, the convenience of alternative transportation options, and the desire for more sustainable living.\n\nAs ownership models change, so too does the way we use and interact with our cars. In the future, we will see a shift from private ownership to shared ownership and usage, as well as an increase in the use of alternative transportation options such as electric scooters and bikes.\n\nThe rise of subscription services and shared mobility is changing the car ownership landscape and giving rise to more sustainable and convenient transportation options."
-            }
-        }
-      
-          res.status(200).json({ message: categoryData2 });
+          // const categoryData2 = {
+          //   "_id": "649481f7bcfc554985a7742d",
+          //   "title": "The Future of Car Ownership: Subscription Services and Shared Mobility",
+          //   "id": "3818a6b7-0a01-4d06-936f-36129708ac26",
+          //   "prompt": "Car ownership is evolving with subscription services and shared mobility. Discuss the future of car ownership and the rise of innovative transportation models.",
+          //   "image": "https://images.unsplash.com/photo-1467489904517-075c242c2b4f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTk2NTl8MHwxfHJhbmRvbXx8fHx8fHx8fDE2ODc0NTQ3MDR8&ixlib=rb-4.0.3&q=80&w=1080",
+          //   "result": {
+          //       "signedUrl": "https://storage.googleapis.com/ai-content-creator/car-ownership-is-evolving-with-subscription-services-and-shared-mobility-discuss-the-future-of-car-ownership-and-the-rise-of-innovative-transportation-models-1687454707287.mp3?GoogleAccessId=api-project%40api-project-108888684492.iam.gserviceaccount.com&Expires=1740816000&Signature=SIZaK5Z6DqiMNuRV76kOH5Z10i96WfA8Q0wP286p34%2FaEy2R1Z20iQWWEpyB87%2Bk0HqPY4aVhmf65d1zdl9AH%2BiZf0ItT4Gy%2Bg2%2F3jgNRHIJVQWQLJPWzyC3FagErC1BlNbujfE65XESIXP0Z4%2F76bu6PRA5KZMgnesbYDUmPtn8xjBQQ%2FgGbKt%2FEnXPnodIVj9D19DR4Hi52XVpUXKUOTAwrcWV0fDBn95aY1Imz12bhUcckp05DzPVOLT6UBUROMJj1OBKTcWyZR%2FYP236tipjnD13FcMGV%2B9%2BTKMQzpYZsklam%2Bn9ILJd1nffaQpMUP4QeSVlUTfojQluZ%2BK55w%3D%3D",
+          //       "text": "Car ownership is evolving, with subscription services and shared mobility on the rise. This trend is driven by a variety of factors, including the increasing cost of ownership, the convenience of alternative transportation options, and the desire for more sustainable living.\n\nAs ownership models change, so too does the way we use and interact with our cars. In the future, we will see a shift from private ownership to shared ownership and usage, as well as an increase in the use of alternative transportation options such as electric scooters and bikes.\n\nThe rise of subscription services and shared mobility is changing the car ownership landscape and giving rise to more sustainable and convenient transportation options."
+          //   }
+
+          
+          res.status(200).json({ message: categoryData });
         } else {
           res.status(404).json({ message: 'Category not found' });
         }
       } catch (error) {
         console.error('Error retrieving category:', error);
-        res.status(500).json({ message: 'An error occurred while retrieving the category' });
+        res.status(500).json({ message: `An error occurred while retrieving the category - ${error}` });
       }
     });
 
