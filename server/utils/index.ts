@@ -60,7 +60,7 @@ export async function generateImageFromPrompt(promptText: string) {
 
     try {
         const image = await openai.images.generate({ model: "dall-e-3", prompt: promptText });
-        return image.data?.[0]?.url || '';
+        return image.data?.[0] || '';
     } catch (error) {
         console.error(error);
     }

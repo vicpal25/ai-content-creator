@@ -29,7 +29,7 @@ const Category = () => {
     <div>
       {data ? (
         <div>
-          <img src={data.image} alt="Cover" />
+          <img src={data.image.url} alt={data.image.revised_prompt} width={300} />
           <h3>{data.title}</h3>
           <p>{data.result.text}</p>
           <AudioPlayer data={data.result.signedUrl} audioSrc={data.result.signedUrl} />
