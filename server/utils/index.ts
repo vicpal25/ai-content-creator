@@ -43,19 +43,27 @@ export async function getSignedUrl(bucketName: string, remoteFileName: string) {
     return url;
 }
 
+// export async function generateImageFromPrompt(promptText: string) {
+//     const unsplashAccessKey = process.env.UNPLASH_ACCESS_KEY;
+
+//     try {
+//         const response = await axios.get(`https://api.unsplash.com/photos/random?query=${promptText}&client_id=${unsplashAccessKey}`);
+//         return response.data.urls.regular;
+//     } catch (error) {
+//         console.error(error);
+//     }
+// }
 
 export async function generateImageFromPrompt(promptText: string) {
 
     const unsplashAccessKey = process.env.UNPLASH_ACCESS_KEY;
 
     try {
-        const response = await axios.get(`https://api.unsplash.com/photos/random?query=${promptText}&client_id=${unsplashAccessKey}`);
-        return response.data.urls.regular;
+        const image = await openai.images.generate({ model: "dall-e-3", prompt: promptText });
+        return image.data?.[0]?.url || '';
     } catch (error) {
         console.error(error);
     }
-
-
 }
 
 export async function generateSuggestionsFromPrompt(promptText: string) {
@@ -65,9 +73,7 @@ export async function generateSuggestionsFromPrompt(promptText: string) {
         model: 'gpt-3.5-turbo',
     });
 
-    console.log('gpt3Response', gpt3Response);
     return gpt3Response.choices?.[0]?.message?.content || '';
-
 }
 
 export async function generateContentFromPrompt(promptText: string, size: number = 500) {
@@ -76,8 +82,6 @@ export async function generateContentFromPrompt(promptText: string, size: number
         messages: [{ role: 'user', content: `Write a good title with the following:  '${promptText}' under ${size} characters.` }],
         model: 'gpt-3.5-turbo',
     });
-
-    console.log('gpt3Response - Title', gpt3Response.choices?.[0]?.message);
 
     return gpt3Response.choices?.[0]?.message?.content || '';
 
