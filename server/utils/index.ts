@@ -1,6 +1,6 @@
 import { Storage } from '@google-cloud/storage';
 import { TextToSpeechClient } from '@google-cloud/text-to-speech';
-import { OpenAIApi, Configuration } from 'openai';
+import { OpenAI } from 'openai';
 import path from 'path';
 import util from 'util';
 import fs from 'fs';
@@ -15,7 +15,12 @@ const storage = new Storage({
     projectId: process.env.GOOGLE_CLOUD_PROJECT_ID,
 });
 
-const { GOOGLE_CLOUD_BUCKET_NAME  } = process.env || 'ai-content-creator';
+const { GOOGLE_CLOUD_BUCKET_NAME } = process.env || 'ai-content-creator';
+
+const openai = new OpenAI({
+    apiKey: process.env['OPENAI_API_KEY'], // This is the default and can be omitted
+});
+
 
 function slugyfy(text: string) {
     return text.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
@@ -38,9 +43,6 @@ export async function getSignedUrl(bucketName: string, remoteFileName: string) {
     return url;
 }
 
-export async function generateVoiceFromParams(make: string, year: string, model: string) {
-
-}
 
 export async function generateImageFromPrompt(promptText: string) {
 
@@ -58,41 +60,26 @@ export async function generateImageFromPrompt(promptText: string) {
 
 export async function generateSuggestionsFromPrompt(promptText: string) {
 
-    const openAIConfig = new Configuration({
-        apiKey: process.env.OPENAI_API_KEY,
-    });
-    const openai = new OpenAIApi(openAIConfig);
-
-    // Generate content using OpenAI's GPT-3
-    const gpt3Response = await openai.createCompletion({
-        model: 'text-davinci-002',
-        prompt: `Please generate some trending 2024 suggestions based on: ${promptText} and return them in JSON format.`,
-        max_tokens: 500,
+    const gpt3Response = await openai.chat.completions.create({
+        messages: [{ role: 'user', content: `Please generate some trending 2024 suggestions based on: ${promptText} and return them in JSON format.` }],
+        model: 'gpt-3.5-turbo',
     });
 
-    const aiResponse = gpt3Response.data.choices?.[0]?.text?.trim() || '';
-
-    const suggestions = aiResponse.split('\n').map((suggestion) => suggestion.trim()).filter((suggestion) => suggestion.length > 0);
-
-    return suggestions;
+    console.log('gpt3Response', gpt3Response);
+    return gpt3Response.choices?.[0]?.message?.content || '';
 
 }
 
 export async function generateContentFromPrompt(promptText: string, size: number = 500) {
 
-    const openAIConfig = new Configuration({
-        apiKey: process.env.OPENAI_API_KEY,
-    });
-    const openai = new OpenAIApi(openAIConfig);
-
-    // Generate content using OpenAI's GPT-3
-    const gpt3Response = await openai.createCompletion({
-        model: 'text-davinci-002',
-        prompt: `Write a good title with the following:  '${promptText}' under ${size} characters.`,
-        max_tokens: 500,
+    const gpt3Response = await openai.chat.completions.create({
+        messages: [{ role: 'user', content: `Write a good title with the following:  '${promptText}' under ${size} characters.` }],
+        model: 'gpt-3.5-turbo',
     });
 
-   return gpt3Response.data.choices?.[0]?.text?.trim() || '';
+    console.log('gpt3Response - Title', gpt3Response.choices?.[0]?.message);
+
+    return gpt3Response.choices?.[0]?.message?.content || '';
 
 }
 
@@ -100,25 +87,9 @@ export async function generateVoice(promptText: string) {
 
     try {
 
-        const openAIConfig = new Configuration({
-            apiKey: process.env.OPENAI_API_KEY,
-        });
-        const openai = new OpenAIApi(openAIConfig);
-
-        // Generate content using OpenAI's GPT-3
-        const gpt3Response = await openai.createCompletion({
-            model: 'text-davinci-002',
-            prompt: `Write a comprehensive review about the following ${promptText}.`,
-            max_tokens: 500,
-        });
-
-        const generatedText = gpt3Response.data.choices?.[0]?.text?.trim() || '';
-
-        console.log('generatedText', generatedText);
-
 
         const request = {
-            input: { text: generatedText },
+            input: { text: promptText },
             // Select the language and SSML voice gender (optional)
             voice: { languageCode: 'en-US', ssmlGender: 'MALE', name: 'en-US-Wavenet-D' },
             // Select the type of audio encoding
@@ -146,7 +117,7 @@ export async function generateVoice(promptText: string) {
 
         return {
             'signedUrl': signedUrl,
-            'text': generatedText
+            'text': promptText
 
         };
     } catch (error) {
@@ -158,42 +129,39 @@ export async function generateVoice(promptText: string) {
 
 export async function generateVideoBasedOnPrompt(promptText: string) {
     const { OPENAI_API_DAVINCI_URL, OPENAI_API_KEY } = process.env;
-  
+
     if (!OPENAI_API_DAVINCI_URL) {
-      console.error('OPENAI_API_DAVINCI_URL is not defined.');
-      return;
+        console.error('OPENAI_API_DAVINCI_URL is not defined.');
+        return;
     }
-  
+
     if (!OPENAI_API_KEY) {
-      console.error('OPENAI_API_KEY is not defined.');
-      return;
+        console.error('OPENAI_API_KEY is not defined.');
+        return;
     }
-  
+
     try {
-      const response = await axios.post(
-        OPENAI_API_DAVINCI_URL,
-        {
-          prompt: promptText,
-          max_tokens: 100,
-          temperature: 0.8,
-          n: 1,
-          stop: '\n',
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${OPENAI_API_KEY}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
+        const response = await axios.post(
+            OPENAI_API_DAVINCI_URL,
+            {
+                prompt: promptText,
+                max_tokens: 100,
+                temperature: 0.8,
+                n: 1,
+                stop: '\n',
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${OPENAI_API_KEY}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
 
-      console.log(response.data);
-      
-
-      const videoUrl = response.data.choices[0].video;
-      // Process and display the video as needed
-      console.log('Generated Video URL:', videoUrl);
+        const videoUrl = response.data.choices[0].video;
+        // Process and display the video as needed
+        console.log('Generated Video URL:', videoUrl);
     } catch (error) {
-      console.error('Error generating video:', error);
+        console.error('Error generating video:', error);
     }
-  }
+}

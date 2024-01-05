@@ -10,9 +10,6 @@ const Home = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       const data = await getTopLevelCategories();
-
-      console.log(data);
-
       setCategories(data);
     };
 
