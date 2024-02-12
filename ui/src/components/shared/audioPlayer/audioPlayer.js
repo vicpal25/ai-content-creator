@@ -6,6 +6,8 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { getEpisode } from '../../../api/index.js';
+
 
 const AudioPlayer = ({ data, audioSrc }) => {
   const audioRef = useRef(null);
@@ -14,10 +16,14 @@ const AudioPlayer = ({ data, audioSrc }) => {
   const handleAudioFinished = async () => {
     try {
       console.log('API post request started');
-      const response = await setSuggestions('Ford vs Mustang history');
-      console.log('API post request successful');
-      console.log(response);
-      setResponseList(response); // Update the response list state with the API response
+      // const response = await setSuggestions('Ford vs Mustang history');
+
+      const response = await getEpisode('986d7f26-8e4b-433e-8f1a-708af2e11d3d'); // Make your API request here
+
+      if (response && response.length > 0) {
+        setResponseList(response); // Access the first element of the array and its `message` property
+      }
+
     } catch (error) {
       console.error('API post request failed:', error);
     }
@@ -26,10 +32,6 @@ const AudioPlayer = ({ data, audioSrc }) => {
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.addEventListener('ended', handleAudioFinished);
-
-      return () => {
-        audioRef.current.removeEventListener('ended', handleAudioFinished);
-      };
     }
   }, []);
 
@@ -93,7 +95,7 @@ const AudioPlayer = ({ data, audioSrc }) => {
 
       <ul>
         {responseList.map((item, index) => (
-          <li key={index}>{item}</li>
+          <li key={index}>{item?.message?.title}</li>
         ))}
       </ul>
     </div>
