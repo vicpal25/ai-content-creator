@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import * as React from 'react';
-import mtodLogo from '../../images/mtod-logo.png';
+import mainLogo from '../../images/main-logo.png';
 import { red } from '@mui/material/colors';
 
 const Navigation = () => {
@@ -41,7 +41,7 @@ const Navigation = () => {
       }}
     >
       <Link to="/" style={{ textDecoration: 'none' }}>
-        <img src={mtodLogo} alt="Logo" style={{ width: 300 }} />
+        <img src={mainLogo} alt="Logo" style={{ width: 140 }} />
       </Link>
 
       <Tooltip title="Account settings">

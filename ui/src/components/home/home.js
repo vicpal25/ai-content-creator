@@ -1,46 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { getTopLevelCategories } from '../../api/index.js';
 import Button from '@mui/material/Button';
+import HomeNav from '../../components/homeNav/homeNav';
 
 const Home = () => {
-  const [categories, setCategories] = useState(null);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const data = await getTopLevelCategories();
-      setCategories(data);
-    };
-
-    fetchCategories();
-  }, []);
-
   return (
     <div className="home">
-      {categories ? (
-        <div>
-          {categories.map((category) => (
-            <Button
-              key={category.id}
-              component={Link}
-              to={`/category/${category.id}`}
-              variant="contained"
-              color="primary"
-              sx={{ m: 2 }}
-            >
-              {category.title}
-            </Button>
-          ))}
-        </div>
-      ) : (
-        'Loading categories...'
-      )}
+    <HomeNav />
+    <style jsx>{`
+          .home {
+            border: 1px solid #eaeaea;
+            padding: 15px;
+            text-align: center;
+          }
+      `}
+      </style>
     </div>
   );
 };
 
-Home.propTypes = {};
-Home.defaultProps = {};
 
 export default Home;

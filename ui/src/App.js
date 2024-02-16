@@ -3,6 +3,7 @@ import Home from './components/home/home';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navigation from './components/navigation/navigation';
 import Category from './components/category/category';
+import Categories from './components/categories/categories';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <div>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/categories" element={<Categories />} />
             <Route path="/category/:id" element={<Category />} />
           </Routes>
         </div>
