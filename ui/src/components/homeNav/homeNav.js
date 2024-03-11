@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 
 const buttons = [
   <Button key="ai-categories" href='/categories'>AI Categories</Button>,
-  <Button key="ai-chatbot">AI Chatbot</Button>,
+  <Button key="ai-chatbot" href='/chat'>AI Chatbot</Button>,
 ];
 
 export default function HomeNav() {

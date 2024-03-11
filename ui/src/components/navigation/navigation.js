@@ -41,7 +41,7 @@ const Navigation = () => {
       }}
     >
       <Link to="/" style={{ textDecoration: 'none' }}>
-        <img src={mainLogo} alt="Logo" style={{ width: 140 }} />
+        <img src={mainLogo} alt="Logo" style={{ width: 80 }} />
       </Link>
 
       <Tooltip title="Account settings">
